@@ -11,7 +11,6 @@ Este projeto faz parte do **Desafio 03** do Programa de Bolsas Fullstack, no qua
 - **Linguagem**: TypeScript
 - **Banco de Dados**: PostgreSQL
 - **ORM**: Prisma
-- **Outras ferramentas**: ElephantSQL (PostgreSQL remoto gratuito)
 
 ## Funcionalidades
 
