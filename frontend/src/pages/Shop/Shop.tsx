@@ -18,11 +18,11 @@ interface Product {
   discount_price?: number;
   is_new: boolean;
   image_link: string;
-  category_id: number; // Ajuste para category_id
+  category_id: number; 
 }
 
 interface FiltersState {
-  category_ids: number[]; // Ajustado para usar category_id ao invés de strings
+  category_ids: number[];
   is_new: boolean;
   has_discount: boolean;
   sort_by: string;
@@ -30,15 +30,15 @@ interface FiltersState {
 
 function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]); // Produtos filtrados
-  const [showFilters, setShowFilters] = useState(false); // Estado para controlar a visibilidade dos filtros
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({
     category_ids: [],
     is_new: false,
     has_discount: false,
-    sort_by: "default", // Inicialmente sem ordenação
+    sort_by: "default",
   });
-  const [productsToShow, setProductsToShow] = useState<number>(16); // Controla quantos produtos exibir
+  const [productsToShow, setProductsToShow] = useState<number>(16);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,7 +47,7 @@ function Shop() {
           "http://localhost:3000/products"
         );
         setProducts(response.data);
-        setFilteredProducts(response.data); // Inicialmente, sem filtros
+        setFilteredProducts(response.data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
@@ -56,46 +56,43 @@ function Shop() {
     fetchProducts();
   }, []);
 
-  // Função para alternar a exibição dos filtros
+ 
   const toggleFilters = () => {
     setShowFilters((prevState) => !prevState);
   };
 
-  // Função para manipular a seleção dos filtros
   const handleFilterChange = (e: any) => {
     const { name, value, checked } = e.target;
 
     if (name === "is_new" || name === "has_discount") {
-      setFilters({
-        ...filters,
+      setFilters((prevFilters) => ({
+        ...prevFilters,
         [name]: checked,
-      });
+      }));
     } else if (name === "category") {
-      // Converta o valor da categoria para um número (pois o category_id é numérico)
       const categoryId = parseInt(value, 10);
-
-      let updatedCategories = filters.category_ids;
-      if (checked) {
-        updatedCategories = [...updatedCategories, categoryId];
-      } else {
-        updatedCategories = updatedCategories.filter(
-          (id) => id !== categoryId
-        );
-      }
-
-      setFilters({
-        ...filters,
-        category_ids: updatedCategories,
+      setFilters((prevFilters) => {
+        let updatedCategories = [...prevFilters.category_ids];
+        if (checked) {
+          updatedCategories.push(categoryId);
+        } else {
+          updatedCategories = updatedCategories.filter(
+            (id) => id !== categoryId
+          );
+        }
+        return {
+          ...prevFilters,
+          category_ids: updatedCategories,
+        };
       });
     } else if (name === "sort_by") {
-      setFilters({
-        ...filters,
+      setFilters((prevFilters) => ({
+        ...prevFilters,
         sort_by: value,
-      });
+      }));
     }
   };
 
-  // Função para alterar a quantidade de produtos exibidos
   const handleShowChange = (e: any) => {
     const value = parseInt(e.target.value, 10);
     if (!isNaN(value) && value >= 1 && value <= 16) {
@@ -106,36 +103,31 @@ function Shop() {
   useEffect(() => {
     let filtered = [...products];
   
-    // Filtrar por categorias usando category_id
     if (filters.category_ids.length > 0) {
       filtered = filtered.filter((product) =>
         filters.category_ids.includes(product.category_id)
       );
     }
   
-    // Filtrar por novos produtos
     if (filters.is_new) {
       filtered = filtered.filter((product) => product.is_new);
     }
   
-    // Filtrar por produtos com desconto
     if (filters.has_discount) {
       filtered = filtered.filter(
-        (product) => product.discount_price !== null && product.discount_price !== undefined
+        (product) =>
+          product.discount_price !== null &&
+          product.discount_price !== undefined
       );
     }
   
-    // Ordenação por preço
     if (filters.sort_by === "ascending") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (filters.sort_by === "descending") {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
   
-    // Se a opção "default" for escolhida, não aplicar nenhuma ordenação
-    if (filters.sort_by === "default") {
-      filtered = [...products]; // Volta ao estado inicial
-    }
+   
   
     setFilteredProducts(filtered.slice(0, productsToShow));
   }, [filters, products, productsToShow]);
@@ -202,7 +194,6 @@ function Shop() {
         </div>
       </FilterContainer>
 
-      {/* Exibe ou oculta os filtros com base no estado */}
       {showFilters && (
         <FiltersSection>
           <h3>Filter Products By:</h3>
@@ -254,9 +245,7 @@ function Shop() {
         </FiltersSection>
       )}
 
-      <ProductsList
-        products={filteredProducts}
-      />
+      <ProductsList products={filteredProducts} />
       <Features />
       <Footer />
     </div>
