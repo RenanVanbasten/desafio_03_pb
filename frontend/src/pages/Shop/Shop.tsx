@@ -18,27 +18,27 @@ interface Product {
   discount_price?: number;
   is_new: boolean;
   image_link: string;
-  category_id: number; // Ajuste para category_id
+  category_id: number;
 }
 
-// Tipagem correta do estado dos filtros
 interface FiltersState {
   category_ids: number[];
   is_new: boolean;
   has_discount: boolean;
-  sort_by: string; // Crescente ou Descrescente
+  sort_by: string;
 }
 
 function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [showFilters, setShowFilters] = useState(false); // Estado para controlar a visibilidade dos filtros
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({
     category_ids: [],
     is_new: false,
     has_discount: false,
-    sort_by: "default", // Inicialmente sem ordenação
+    sort_by: "default",
   });
+  const [productsToShow, setProductsToShow] = useState<number>(16); // Controla quantos produtos exibir
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,7 +47,7 @@ function Shop() {
           "http://localhost:3000/products"
         );
         setProducts(response.data);
-        setFilteredProducts(response.data); // Inicialmente, sem filtros
+        setFilteredProducts(response.data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
@@ -56,12 +56,10 @@ function Shop() {
     fetchProducts();
   }, []);
 
-  // Função para alternar a exibição dos filtros
   const toggleFilters = () => {
     setShowFilters((prevState) => !prevState);
   };
 
-  // Função para manipular a seleção dos filtros
   const handleFilterChange = (e: any) => {
     const { name, value, checked } = e.target;
 
@@ -93,39 +91,40 @@ function Shop() {
     }
   };
 
-  // Função para aplicar os filtros e a ordenação
-  useEffect(() => {
-    let filtered = [...products]; // Copia dos produtos originais
+  const handleShowChange = (e: any) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value >= 1 && value <= 16) {
+      setProductsToShow(value); // Controla quantos produtos exibir dinamicamente
+    }
+  };
 
-    // Filtro por categorias usando category_id
+  useEffect(() => {
+    let filtered = [...products];
+
     if (filters.category_ids.length > 0) {
       filtered = filtered.filter((product) =>
         filters.category_ids.includes(product.category_id)
       );
     }
 
-    // Filtro por produtos novos
     if (filters.is_new) {
       filtered = filtered.filter((product) => product.is_new);
     }
 
-    // Filtro por produtos com desconto
     if (filters.has_discount) {
       filtered = filtered.filter(
         (product) => product.discount_price !== undefined
       );
     }
 
-    // Ordenação por preço
     if (filters.sort_by === "ascending") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (filters.sort_by === "descending") {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
 
-    // Se a opção "default" for escolhida, não aplicar nenhuma ordenação
     if (filters.sort_by === "default") {
-      filtered = [...products]; // Volta ao estado inicial
+      filtered = [...products];
     }
 
     setFilteredProducts(filtered);
@@ -156,12 +155,21 @@ function Shop() {
             <img src={Icon03} alt="" />
             <div className="vertical-line"></div>
             <span>
-              Showing {filteredProducts.length} of {products.length} results
+              Showing {filteredProducts.slice(0, productsToShow).length} of{" "}
+              {products.length} results
             </span>
           </div>
           <div>
             <label htmlFor="show">Show</label>
-            <input type="text" name="show" id="" placeholder="16" />
+            <input
+              type="number"
+              name="show"
+              value={productsToShow}
+              onChange={handleShowChange}
+              min="1"
+              max="16"
+              placeholder="16"
+            />
             <label htmlFor="sort_by">Sort by</label>
             <select
               name="sort_by"
@@ -184,7 +192,6 @@ function Shop() {
         </div>
       </FilterContainer>
 
-      {/* Exibe ou oculta os filtros com base no estado */}
       {showFilters && (
         <FiltersSection>
           <h3>Filter Products By:</h3>
@@ -236,7 +243,9 @@ function Shop() {
         </FiltersSection>
       )}
 
-      <ProductsList products={filteredProducts} /> {/* Passando os produtos filtrados */}
+      <ProductsList
+        products={filteredProducts.slice(0, productsToShow)} // Limitando os produtos exibidos
+      />
       <Features />
       <Footer />
     </div>
