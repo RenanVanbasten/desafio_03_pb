@@ -40,12 +40,3 @@ Este projeto faz parte do **Desafio 03** do Programa de Bolsas Fullstack, no qua
 
 1. Visualização de detalhes e imagens secundárias dos produtos.
 2. Exibição de produtos relacionados.
-
-## Como Executar o Projeto
-
-### Backend
-
-1. Instale as dependências:
-   ```bash
-   cd backend
-   npm install
