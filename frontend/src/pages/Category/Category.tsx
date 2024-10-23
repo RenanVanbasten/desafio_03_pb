@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // Para pegar o parâmetro da URL
+import { useParams } from "react-router-dom";
 import Header from "../../components/Header";
 import ProductsList from "../../components/ProductsList";
 import Features from "../../components/Features";
@@ -14,40 +14,44 @@ interface Product {
   discount_price?: number;
   is_new: boolean;
   image_link: string;
-  category_id: number; // Adicionando o campo category_id para associar os produtos à categoria
+  category_id: number;
 }
 
 function Category() {
-  const { categoryName } = useParams<{ categoryName: string }>(); // Obtendo o nome da categoria da URL
-  const [products, setProducts] = useState<Product[]>([]); // Para armazenar todos os produtos
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]); // Para armazenar os produtos filtrados
+  const { categoryName } = useParams<{ categoryName: string }>();
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 16;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<Product[]>("http://localhost:3000/products"); // Substitua pela URL correta da API
-        setProducts(response.data);
+        const response = await axios.get<Product[]>("http://localhost:3000/products");
+        const categoryMap: { [key: string]: number } = {
+          Dining: 7,
+          Living: 8,
+          Bedroom: 9,
+        };
+
+        if (categoryName && categoryName in categoryMap) {
+          const categoryId = categoryMap[categoryName as keyof typeof categoryMap];
+          const filtered = response.data.filter(product => product.category_id === categoryId);
+          setFilteredProducts(filtered);
+        } else {
+          setFilteredProducts([]);
+        }
       } catch (error) {
-        console.error("Erro ao buscar os produtos:", error);
+        console.error("Erro ao buscar os produtos da categoria:", error);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [categoryName]);
 
-  useEffect(() => {
-    if (categoryName) {
-      // Filtrar os produtos pela categoria
-      const categoryId = categoryName.toLowerCase() === "dining" ? 7 :
-                        categoryName.toLowerCase() === "living" ? 8 :
-                        categoryName.toLowerCase() === "bedroom" ? 9 : null;
-
-      if (categoryId !== null) {
-        const filtered = products.filter((product) => product.category_id === categoryId);
-        setFilteredProducts(filtered);
-      }
-    }
-  }, [categoryName, products]);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div>
@@ -64,7 +68,12 @@ function Category() {
         <h1>{categoryName} Products</h1>
       </div>
 
-      <ProductsList products={filteredProducts} /> {/* Passando apenas os produtos filtrados */}
+      <ProductsList
+        products={currentProducts}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
       <Features />
       <Footer />
     </div>

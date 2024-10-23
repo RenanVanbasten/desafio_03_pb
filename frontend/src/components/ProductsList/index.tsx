@@ -1,5 +1,6 @@
-import { ProductsContainer } from "./styles"; // O seu styled-component já fornecido
-import Card from "../Card"; // O componente de Card para renderizar os produtos
+import { useState } from "react";
+import { ProductsContainer } from "./styles";
+import Card from "../Card";
 
 interface Product {
   id: number;
@@ -12,10 +13,15 @@ interface Product {
 }
 
 interface ProductsListProps {
-  products: Product[]; // Receber a lista de produtos via props
+  products: Product[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (pageNumber: number) => void;
 }
 
-function ProductsList({ products }: ProductsListProps) {
+function ProductsList({ products, currentPage, totalPages, onPageChange }: ProductsListProps) {
+  const productsPerPage = 16;
+
   return (
     <ProductsContainer>
       <div className="container">
@@ -25,7 +31,7 @@ function ProductsList({ products }: ProductsListProps) {
               products.map((product) => (
                 <Card
                   key={product.id}
-                  id={product.id} // Certifique-se de passar o id
+                  id={product.id}
                   name={product.name}
                   description={product.description}
                   price={product.price}
@@ -39,10 +45,27 @@ function ProductsList({ products }: ProductsListProps) {
             )}
           </div>
           <div className="container-buttons">
-            <button> 1 </button>
-            <button> 2 </button>
-            <button> 3 </button>
-            <button style={{ width: "100px" }}> Next </button>
+            {currentPage > 1 && (
+              <button onClick={() => onPageChange(currentPage - 1)} style={{ width: "100px" }}>
+                Previous
+              </button>
+            )}
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => onPageChange(index + 1)}
+                style={{
+                  fontWeight: currentPage === index + 1 ? "bold" : "normal",
+                }}
+              >
+                {index + 1}
+              </button>
+            ))}
+            {currentPage < totalPages && (
+              <button onClick={() => onPageChange(currentPage + 1)} style={{ width: "100px" }}>
+                Next
+              </button>
+            )}
           </div>
         </div>
       </div>

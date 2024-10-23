@@ -18,7 +18,7 @@ interface Product {
   discount_price?: number;
   is_new: boolean;
   image_link: string;
-  category_id: number; 
+  category_id: number;
 }
 
 interface FiltersState {
@@ -38,7 +38,8 @@ function Shop() {
     has_discount: false,
     sort_by: "default",
   });
-  const [productsToShow, setProductsToShow] = useState<number>(16);
+  const [productsPerPage, setProductsPerPage] = useState<number>(16);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -56,7 +57,6 @@ function Shop() {
     fetchProducts();
   }, []);
 
- 
   const toggleFilters = () => {
     setShowFilters((prevState) => !prevState);
   };
@@ -91,28 +91,31 @@ function Shop() {
         sort_by: value,
       }));
     }
+
+    setCurrentPage(1);
   };
 
   const handleShowChange = (e: any) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1 && value <= 16) {
-      setProductsToShow(value);
+    if (!isNaN(value) && value >= 1) {
+      setProductsPerPage(value);
+      setCurrentPage(1);
     }
   };
 
   useEffect(() => {
     let filtered = [...products];
-  
+
     if (filters.category_ids.length > 0) {
       filtered = filtered.filter((product) =>
         filters.category_ids.includes(product.category_id)
       );
     }
-  
+
     if (filters.is_new) {
       filtered = filtered.filter((product) => product.is_new);
     }
-  
+
     if (filters.has_discount) {
       filtered = filtered.filter(
         (product) =>
@@ -120,18 +123,23 @@ function Shop() {
           product.discount_price !== undefined
       );
     }
-  
+
     if (filters.sort_by === "ascending") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (filters.sort_by === "descending") {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
-  
-   
-  
-    setFilteredProducts(filtered.slice(0, productsToShow));
-  }, [filters, products, productsToShow]);
-  
+
+    setFilteredProducts(filtered);
+  }, [filters, products]);
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   return (
     <div>
@@ -158,7 +166,7 @@ function Shop() {
             <img src={Icon03} alt="" />
             <div className="vertical-line"></div>
             <span>
-              Showing {filteredProducts.length} of {products.length} results
+              Showing {currentProducts.length} of {products.length} results
             </span>
           </div>
           <div>
@@ -166,10 +174,10 @@ function Shop() {
             <input
               type="number"
               name="show"
-              value={productsToShow}
+              value={productsPerPage}
               onChange={handleShowChange}
               min="1"
-              max="16"
+              max={filteredProducts.length}
               placeholder="16"
             />
             <label htmlFor="sort_by">Sort by</label>
@@ -245,7 +253,12 @@ function Shop() {
         </FiltersSection>
       )}
 
-      <ProductsList products={filteredProducts} />
+      <ProductsList
+        products={currentProducts}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
       <Features />
       <Footer />
     </div>
