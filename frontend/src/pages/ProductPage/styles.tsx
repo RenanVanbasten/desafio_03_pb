@@ -10,7 +10,7 @@ export const NavigationTrail = styled.div`
   display: flex; 
   justify-content: flex-start;
   align-items: center; 
-  padding-left: 110px; /* Margem à esquerda */
+  padding-left: 110px; 
 
   .navigationTrail-container {
     display: flex;
@@ -26,8 +26,8 @@ export const NavigationTrail = styled.div`
   }
 
   .vertical-line {
-    width: 2px; /* Largura da linha */
-    height: 30px; /* Altura da linha */
-    background-color: #9f9f9f; /* Cor da linha */
+    width: 2px; 
+    height: 30px; 
+    background-color: #9f9f9f; 
   }
 `;

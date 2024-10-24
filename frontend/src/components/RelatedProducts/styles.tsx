@@ -3,21 +3,21 @@ import styled from "styled-components";
 export const ProductsContainer = styled.div`
   .container {
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    width: 100%; /* Para ocupar a largura total */
-    margin: 0 auto; /* Centraliza o container na tela */
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto; 
   }
 
   .container-content {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza verticalmente */
-    width: 100%; /* Para garantir que ocupe toda a largura */
+    align-items: center; 
+    width: 100%; 
 
     .container-title {
       display: flex;
-      justify-content: center; /* Centraliza o título */
-      margin-bottom: 20px; /* Espaçamento abaixo do título */
+      justify-content: center;
+      margin-bottom: 20px;
       margin-top: 40px;
     }
 
@@ -26,25 +26,33 @@ export const ProductsContainer = styled.div`
       grid-template-columns: repeat(4, 1fr);
       grid-row-gap: 15px;
       width: 1200px;
-      margin-bottom: 10px; /* Ajuste na margem inferior para ficar mais próximo do botão */
-    }
-
-    button {
-      margin-bottom: 20px; /* Menor distância entre o botão e o hr */
-      width: 245px;
-      height: 48px;
-      border: 1px solid #B88E2F;
-      background-color: white;
-      color: #B88E2F;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 24px;
+      margin-bottom: 10px;
     }
   }
 
   hr {
-    margin: 40px 0; /* Margem para a linha horizontal */
-    width: 100%; /* Garante que a linha horizontal ocupe toda a largura */
-    max-width: 1440px; /* Limite de largura para manter a consistência */
+    margin: 60px 0;
+    width: 100%;
+    max-width: 1440px;
+  }
+
+  button {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    width: 245px;
+    height: 48px;
+    border: 1px solid #b88e2f;
+    background-color: white;
+    color: #b88e2f;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    cursor: pointer; /* Adiciona um cursor de ponteiro para o botão */
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #b88e2f;
+      color: white;
+    }
   }
 `;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
-import Card from "../Card"; // O componente Card já foi implementado
+import Card from "../Card";
 import { ProductsContainer } from "./styles";
 
 // Definindo o tipo para os produtos
@@ -17,6 +18,7 @@ interface ProductType {
 function RelatedProducts({ categoryId }: { categoryId: number }) {
   const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -41,6 +43,10 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
     return <div>No related products found.</div>;
   }
 
+  const handleShowMore = () => {
+    navigate("/shop");
+  };
+
   return (
     <ProductsContainer>
       <div className="container">
@@ -62,6 +68,8 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
               />
             ))}
           </div>
+          <button onClick={handleShowMore}>Show More</button>
+          <hr />
         </div>
       </div>
     </ProductsContainer>

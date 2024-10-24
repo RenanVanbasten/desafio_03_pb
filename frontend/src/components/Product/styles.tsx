@@ -3,53 +3,56 @@ import styled from "styled-components";
 export const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza o container na tela */
-  justify-content: center; /* Centraliza verticalmente */
-  width: 100%; /* Garante que ocupa 100% da largura da tela */
-  max-width: 1440px; /* Define a largura máxima do componente */
-  margin: 0 auto; /* Centraliza o container horizontalmente */
+  align-items: center;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
 
   .container {
-    display: flex; /* Usando flexbox para alinhar lado a lado */
+    display: flex;
     width: 100%;
-    max-width: 1440px; /* Define a largura máxima do componente */
-    margin: 0 auto; /* Centraliza o container */
-    justify-content: center; /* Centraliza os itens dentro do container */
+    max-width: 1440px;
+    margin: 0 auto;
+    justify-content: center;
 
     .container-images {
-      display: flex; /* Mantém flexbox para a disposição */
-      margin: 20px 0; /* Removido margin lateral para centralizar */
-      align-items: flex-start; /* Alinha as miniaturas e a imagem principal ao topo */
+      display: flex;
+      margin: 20px 0;
+      align-items: flex-start;
 
       .thumbnail {
         display: flex;
-        flex-direction: column; /* Alinha miniaturas verticalmente */
+        flex-direction: column;
         margin-left: 100px;
 
         img {
-          margin-bottom: 10px; /* Espaçamento entre miniaturas */
-          width: 80px; /* Ajusta a largura das miniaturas */
-          height: auto; /* Mantém a proporção das imagens */
+          margin-bottom: 10px;
+          width: 80px;
+          height: auto;
+          cursor: pointer;
+          border-radius: 10px;
         }
       }
 
       .main-image {
-        width: 423px; /* Largura da imagem principal */
-        height: 500px; /* Altura da imagem principal */
-        object-fit: cover; /* Mantém a proporção da imagem */
+        width: 423px;
+        height: 500px;
+        object-fit: cover;
+        margin-left: 20px;
+        border-radius: 10px;
       }
     }
 
     aside {
-      flex: 1; /* O aside ocupa menos espaço */
-      padding: 20px; /* Espaçamento interno */
+      flex: 1;
+      padding: 20px;
       display: flex;
-      flex-direction: column; /* Alinha os itens em coluna */
-      justify-content: space-between; /* Distribui o espaço entre os itens */
-      align-items: flex-start; /* Alinha os itens à esquerda */
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
 
       h2 {
-        margin-bottom: 10px; /* Margem abaixo do título */
+        margin-bottom: 10px;
         font-size: 42px;
         font-weight: 400;
         line-height: 63px;
@@ -63,11 +66,11 @@ export const ProductContainer = styled.div`
       }
 
       .rate {
-        margin-bottom: 10px; /* Margem abaixo da taxa */
+        margin-bottom: 10px;
 
         span {
-          display: block; /* Exibe o span em bloco para que fique em cima */
-          margin-bottom: 5px; /* Margem abaixo do span */
+          display: block;
+          margin-bottom: 5px;
           font-size: 13px;
           font-weight: 400;
           line-height: 19.5px;
@@ -75,7 +78,7 @@ export const ProductContainer = styled.div`
         }
 
         p {
-          margin-top: 0; /* Remove a margem superior para alinhamento */
+          margin-top: 0;
           font-size: 13px;
           font-weight: 400;
           line-height: 19.5px;
@@ -85,12 +88,12 @@ export const ProductContainer = styled.div`
       .size,
       .color {
         display: flex;
-        flex-direction: column; /* Alinha texto e botões em coluna */
-        margin-bottom: 20px; /* Margem abaixo do grupo size/color */
-        align-items: flex-start; /* Alinha à esquerda */
+        flex-direction: column;
+        margin-bottom: 20px;
+        align-items: flex-start;
 
         span {
-          margin-bottom: 5px; /* Espaçamento abaixo do texto "Size" ou "Color" */
+          margin-bottom: 5px;
           color: #9f9f9f;
           font-size: 14px;
           font-weight: 400;
@@ -98,17 +101,25 @@ export const ProductContainer = styled.div`
         }
 
         .button-style {
-          display: flex; /* Alinha os botões horizontalmente */
-          gap: 5px; /* Espaço menor entre os botões */
+          display: flex;
+          gap: 5px;
         }
 
         button {
-          margin-left: 0; /* Sem margem à esquerda */
-          width: 40px; /* Largura dos botões */
-          height: 40px; /* Altura dos botões */
-          border-radius: 3px; /* Bordas levemente arredondadas */
+          width: 40px;
+          height: 40px;
+          border-radius: 3px;
           border-style: none;
+          background-color: transparent;
+          color: black;
+          cursor: pointer;
         }
+
+        button.selected {
+          background-color: #b88e2f;
+          color: #fff;
+        }
+
         .bt-1 {
           background-color: #816dfa;
         }
@@ -120,87 +131,86 @@ export const ProductContainer = styled.div`
         .bt-3 {
           background-color: #b88e2f;
         }
+
+        button.color-selected {
+          border: 5px solid #b6bde4;
+        }
       }
 
       .color button {
         border-radius: 50%;
-        border-style: none; /* Botões redondos para a cor */
       }
 
       .product-controls {
-        display: flex; /* Alinha os botões horizontalmente */
-        margin-top: 20px; /* Margem acima para espaçar do conteúdo acima */
-        align-items: center; /* Alinha os botões verticalmente no centro */
-        margin-left: 0; /* Remove qualquer margem à esquerda */
-        justify-content: flex-start; /* Garante que os botões fiquem alinhados à esquerda */
+        display: flex;
+        margin-top: 20px;
         gap: 10px;
 
         button {
-          border-radius: 15px; /* Bordas levemente arredondadas */
+          border-radius: 15px;
           border: 1px solid;
-          margin-right: 5px; /* Espaço entre os botões */
           font-size: 20px;
           line-height: 30px;
-          font-weight: 400;
           padding: 20px;
           background-color: white;
         }
       }
 
       .product-details {
-        display: flex; /* Usando flexbox */
-        flex-direction: column; /* Alinha os itens em coluna */
-        margin: 0; /* Remove margem */
-        gap: 10px; /* Espaçamento entre os itens */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
 
         .sku,
         .category,
         .tags,
         .share {
-          display: flex; /* Usando flexbox para alinhar os itens */
-          justify-content: flex-start; /* Alinha todos à esquerda */
-          width: 100%; /* Garante que ocupem toda a largura */
+          display: flex;
+          justify-content: flex-start;
+          width: 100%;
         }
 
         .label {
-          font-weight: bold; /* Deixa o texto do label em negrito */
-          margin-right: 10px; /* Espaço entre o label e o valor */
-          width: 100px; /* Largura fixa para os labels */
+          font-weight: bold;
+          margin-right: 10px;
+          width: 100px;
         }
 
         .value {
-          flex: 1; /* O valor ocupa o restante do espaço */
-          display: flex; /* Usando flexbox para os ícones */
-          align-items: center; /* Alinha os ícones verticalmente */
-          gap: 10px; /* Espaço entre os ícones */
-          margin-left: 10px; /* Margem esquerda para alinhar com os ícones */
+          flex: 1;
+          margin-left: 10px;
         }
 
         .icons {
-          display: flex; /* Alinha os ícones horizontalmente */
-          gap: 5px; /* Espaçamento entre os ícones */
-          align-items: center; /* Alinha os ícones verticalmente */
+          display: flex;
+          gap: 5px;
+          align-items: center;
         }
       }
-
-      height: auto; /* Pode ser ajustado se necessário, mas deve se adaptar à imagem principal */
     }
   }
 
   hr {
-    margin: 20px 0; /* Margem para a linha horizontal */
-    width: 100%; /* Garante que a linha horizontal ocupe toda a largura */
-    max-width: 1440px; /* Limita a largura da linha horizontal */
+    margin: 20px 0;
+    width: 100%;
+    max-width: 1440px;
   }
 
   .description {
-    margin: 20px 0; /* Espaçamento para a descrição */
-    width: 100%; /* Garante que a descrição ocupe toda a largura */
-    max-width: 1440px; /* Limita a largura da descrição */
+    margin: 20px 0;
+    width: 100%;
+    max-width: 1440px;
 
     h4 {
-      text-align: center; /* Centraliza o texto */
-      margin: 20px 0; /* Margem em cima e embaixo */
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    p {
+      text-align: center;
+      font-size: 16px;
+      margin: 0 auto;
+      max-width: 800px;
     }
   }
 `;

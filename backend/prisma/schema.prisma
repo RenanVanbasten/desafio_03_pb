@@ -11,8 +11,8 @@ model category {
   id           Int       @id @default(autoincrement())
   name         String    @db.VarChar(50)
   image_link   String?   @db.VarChar(250)
-  created_date DateTime? @db.Timestamp(6)
-  updated_date DateTime? @db.Timestamp(6)
+  created_date DateTime  @default(now())
+  updated_date DateTime  @updatedAt
   product      product[]
 }
 
@@ -28,8 +28,10 @@ model product {
   discount_percent  Int?
   is_new            Boolean?
   image_link        String?   @db.VarChar(250)
-  other_images_link String?   @db.VarChar(1000)
-  created_date      DateTime? @db.Timestamp(6)
-  updated_date      DateTime? @db.Timestamp(6)
+  other_images_link String[]
+  created_date      DateTime  @default(now())
+  updated_date      DateTime  @updatedAt
   category          category  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+

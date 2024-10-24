@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importando useNavigate para navegação
+import { useNavigate } from "react-router-dom";
 import { ProductsContainer } from "./styles";
 import Card from "../Card";
 import axios from "axios";
@@ -16,7 +16,7 @@ interface Product {
 
 function OurProducts() {
   const [products, setProducts] = useState<Product[]>([]);
-  const navigate = useNavigate(); // Inicializando o hook useNavigate
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,7 +34,7 @@ function OurProducts() {
   }, []);
 
   const handleShowMore = () => {
-    navigate("/shop"); // Redireciona para a página ProductList
+    navigate("/shop");
   };
 
   return (
@@ -44,10 +44,10 @@ function OurProducts() {
           <h1>Our Products</h1>
         </div>
         <div className="container-card">
-          {products.slice(0, 8).map((product) => ( // Exibindo apenas 8 produtos
+          {products.slice(0, 8).map((product) => ( 
             <Card
               key={product.id}
-              id={product.id} // Passando o ID para o Card
+              id={product.id}
               name={product.name}
               description={product.description}
               price={product.price}
@@ -57,7 +57,7 @@ function OurProducts() {
             />
           ))}
         </div>
-        <button onClick={handleShowMore}>Show More</button> {/* Evento de clique para redirecionar */}
+        <button onClick={handleShowMore}>Show More</button>
       </div>
     </ProductsContainer>
   );
