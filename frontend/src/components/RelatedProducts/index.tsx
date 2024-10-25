@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "../Card";
 import { ProductsContainer } from "./styles";
@@ -17,12 +17,15 @@ interface ProductType {
 function RelatedProducts({ categoryId }: { categoryId: number }) {
   const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleProducts, setVisibleProducts] = useState(4);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
       try {
-        const response = await axios.get<ProductType[]>(`http://localhost:3000/products?category_id=${categoryId}`);
+        const response = await axios.get<ProductType[]>(
+          `http://localhost:3000/products?category_id=${categoryId}`
+        );
         setRelatedProducts(response.data);
         setLoading(false);
       } catch (error) {
@@ -43,7 +46,12 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
   }
 
   const handleShowMore = () => {
-    navigate("/shop");
+    if (visibleProducts < 8) {
+      // Mostra mais 4 produtos
+      setVisibleProducts(8);
+    } else {
+      navigate("/shop");
+    }
   };
 
   return (
@@ -54,7 +62,7 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
             <h1>Related Products</h1>
           </div>
           <div className="container-card">
-            {relatedProducts.slice(0, 4).map((product) => (
+            {relatedProducts.slice(0, visibleProducts).map((product) => (
               <Card
                 key={product.id}
                 id={product.id}
@@ -67,7 +75,9 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
               />
             ))}
           </div>
-          <button className="show-more" onClick={handleShowMore}>Show More</button>
+          <button className="show-more" onClick={handleShowMore}>
+            Show More
+          </button>
           <hr />
         </div>
       </div>

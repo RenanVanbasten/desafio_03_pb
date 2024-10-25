@@ -97,7 +97,7 @@ export const ProductContainer = styled.div`
           width: 30px;
           border: none;
           border-radius: 5px;
-          background-color: transparent;
+          cursor: pointer;
         }
 
         .size-selected {
@@ -127,6 +127,7 @@ export const ProductContainer = styled.div`
           width: 30px;
           border: none;
           border-radius: 50%;
+          cursor: pointer;
         }
 
         .bt-1 {
