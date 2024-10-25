@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ProductsContainer } from "./styles";
 import Card from "../Card";
 
@@ -20,7 +19,7 @@ interface ProductsListProps {
 }
 
 function ProductsList({ products, currentPage, totalPages, onPageChange }: ProductsListProps) {
-  const productsPerPage = 16;
+  
 
   return (
     <ProductsContainer>
@@ -46,12 +45,12 @@ function ProductsList({ products, currentPage, totalPages, onPageChange }: Produ
           </div>
           <div className="container-buttons">
             {currentPage > 1 && (
-              <button onClick={() => onPageChange(currentPage - 1)} style={{ width: "100px" }}>
+              <button className="button-control" onClick={() => onPageChange(currentPage - 1)} style={{ width: "100px" }}>
                 Previous
               </button>
             )}
             {Array.from({ length: totalPages }, (_, index) => (
-              <button
+              <button className="button-control"
                 key={index + 1}
                 onClick={() => onPageChange(index + 1)}
                 style={{
@@ -62,7 +61,7 @@ function ProductsList({ products, currentPage, totalPages, onPageChange }: Produ
               </button>
             ))}
             {currentPage < totalPages && (
-              <button onClick={() => onPageChange(currentPage + 1)} style={{ width: "100px" }}>
+              <button className="button-control" onClick={() => onPageChange(currentPage + 1)} style={{ width: "100px" }}>
                 Next
               </button>
             )}

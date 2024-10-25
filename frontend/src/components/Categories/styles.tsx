@@ -6,7 +6,7 @@ export const CategoriesContainer = styled.div`
     justify-content: center;
     width: 1440px;
     margin: 0 auto;
-    top: 0px; /* Centraliza o container horizontalmente */
+    top: 0px;
   }
 
   .container-content {
@@ -31,8 +31,8 @@ export const CategoriesContainer = styled.div`
         margin: 10px;
 
         img:hover {
-          transform: scale(1.1); /* Aumenta a imagem no hover */
-          opacity: 0.8; /* Altera a opacidade */
+          transform: scale(1.1);
+          opacity: 0.8;
         }
 
         h4 {

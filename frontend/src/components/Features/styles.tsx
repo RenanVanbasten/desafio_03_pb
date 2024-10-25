@@ -5,15 +5,15 @@ export const FeatureContainer = styled.div`
   width: 1440px;
   background-color: #FAF3EA;
   display: flex;
-  justify-content: center; /* Centraliza o conteúdo do contêiner */
+  justify-content: center;
   padding: 80px;
-  margin: 0 auto; /* Centraliza o FeatureContainer na tela */
+  margin: 0 auto;
 
   .container-content {
-    display: flex; /* Permite que os elementos internos fiquem lado a lado */
-    justify-content: space-between; /* Mantém os itens espaçados */
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    width: 100%; /* Faz o conteúdo ocupar toda a largura do contêiner */
+    width: 100%;
   }
 
   img {

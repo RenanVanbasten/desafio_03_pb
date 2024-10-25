@@ -11,13 +11,11 @@ export const ProductContainer = styled.div`
   .container {
     display: flex;
     width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
     justify-content: center;
+    margin: 20px 0;
 
     .container-images {
       display: flex;
-      margin: 20px 0;
       align-items: flex-start;
 
       .thumbnail {
@@ -28,7 +26,6 @@ export const ProductContainer = styled.div`
         img {
           margin-bottom: 10px;
           width: 80px;
-          height: auto;
           cursor: pointer;
           border-radius: 10px;
         }
@@ -48,7 +45,6 @@ export const ProductContainer = styled.div`
       padding: 20px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       align-items: flex-start;
 
       h2 {
@@ -61,7 +57,6 @@ export const ProductContainer = styled.div`
       .price {
         font-size: 24px;
         font-weight: 500;
-        line-height: 36px;
         color: #9f9f9f;
       }
 
@@ -70,54 +65,68 @@ export const ProductContainer = styled.div`
 
         span {
           display: block;
-          margin-bottom: 5px;
           font-size: 13px;
           font-weight: 400;
-          line-height: 19.5px;
           color: #9f9f9f;
         }
 
         p {
-          margin-top: 0;
           font-size: 13px;
           font-weight: 400;
           line-height: 19.5px;
         }
       }
 
-      .size,
-      .color {
+      .size {
         display: flex;
         flex-direction: column;
         margin-bottom: 20px;
-        align-items: flex-start;
 
         span {
           margin-bottom: 5px;
           color: #9f9f9f;
           font-size: 14px;
           font-weight: 400;
-          line-height: 21px;
         }
-
-        .button-style {
+        .button-size-style {
           display: flex;
-          gap: 5px;
+          gap: 20px;
         }
-
         button {
-          width: 40px;
-          height: 40px;
-          border-radius: 3px;
-          border-style: none;
+          height: 30px;
+          width: 30px;
+          border: none;
+          border-radius: 5px;
           background-color: transparent;
-          color: black;
-          cursor: pointer;
         }
 
-        button.selected {
-          background-color: #b88e2f;
+        .size-selected {
+          background-color: #B88E2F;
           color: #fff;
+        }
+      }
+
+      .color {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 16px;
+
+        span {
+          margin-bottom: 5px;
+          color: #9f9f9f;
+          font-size: 14px;
+          font-weight: 400;
+        }
+
+        .button-color-style {
+          display: flex;
+          gap: 16px;
+        }
+        button {
+          height: 30px;
+          width: 30px;
+          border: none;
+          border-radius: 50%;
         }
 
         .bt-1 {
@@ -132,13 +141,9 @@ export const ProductContainer = styled.div`
           background-color: #b88e2f;
         }
 
-        button.color-selected {
-          border: 5px solid #b6bde4;
+        .color-selected {
+          border: 5px solid #bdb4ee;
         }
-      }
-
-      .color button {
-        border-radius: 50%;
       }
 
       .product-controls {
@@ -150,7 +155,6 @@ export const ProductContainer = styled.div`
           border-radius: 15px;
           border: 1px solid;
           font-size: 20px;
-          line-height: 30px;
           padding: 20px;
           background-color: white;
         }
@@ -166,13 +170,13 @@ export const ProductContainer = styled.div`
         .tags,
         .share {
           display: flex;
-          justify-content: flex-start;
+          align-items: center;
           width: 100%;
+          justify-content: flex-start;
         }
 
         .label {
           font-weight: bold;
-          margin-right: 10px;
           width: 100px;
         }
 
@@ -182,9 +186,24 @@ export const ProductContainer = styled.div`
         }
 
         .icons {
+          margin-left: 10px;
           display: flex;
-          gap: 5px;
+          gap: 30px;
           align-items: center;
+
+          button {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 24px;
+              height: 24px;
+            }
+          }
         }
       }
     }
@@ -200,17 +219,22 @@ export const ProductContainer = styled.div`
     margin: 20px 0;
     width: 100%;
     max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    h4 {
-      text-align: center;
-      margin: 20px 0;
+    .description-title {
+      display: flex;
+      gap: 52px;
+      font-size: 24px;
     }
 
-    p {
-      text-align: center;
+    .description-text {
+      text-align: justify;
       font-size: 16px;
-      margin: 0 auto;
       max-width: 800px;
+      margin-top: 20px;
+      color: #9f9f9f;
     }
   }
 `;

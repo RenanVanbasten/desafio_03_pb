@@ -4,7 +4,6 @@ import axios from "axios";
 import Card from "../Card";
 import { ProductsContainer } from "./styles";
 
-// Definindo o tipo para os produtos
 interface ProductType {
   id: number;
   name: string;
@@ -68,7 +67,7 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
               />
             ))}
           </div>
-          <button onClick={handleShowMore}>Show More</button>
+          <button className="show-more" onClick={handleShowMore}>Show More</button>
           <hr />
         </div>
       </div>

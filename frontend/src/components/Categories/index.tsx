@@ -14,19 +14,19 @@ function Categories() {
           </div>
           <div className="container-card">
             <div className="card-image">
-              <Link to="/category/Dining"> {/* Link para a página da categoria */}
+              <Link to="/category/Dining">
                 <img src={DiningImage} alt="Dining" />
               </Link>
               <h4>Dining</h4>
             </div>
             <div className="card-image">
-              <Link to="/category/Living"> {/* Link para a página da categoria */}
+              <Link to="/category/Living">
                 <img src={LivingImage} alt="Living" />
               </Link>
               <h4>Living</h4>
             </div>
             <div className="card-image">
-              <Link to="/category/Bedroom"> {/* Link para a página da categoria */}
+              <Link to="/category/Bedroom">
                 <img src={BedroomImage} alt="Bedroom" />
               </Link>
               <h4>Bedroom</h4>

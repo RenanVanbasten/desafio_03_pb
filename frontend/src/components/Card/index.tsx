@@ -4,7 +4,6 @@ import CompareIcon from "../../assets/icons/compare-svgrepo-com 1.png";
 import LikeIcon from "../../assets/icons/like.png";
 import { Cards } from "./styles";
 
-// Definindo a interface para as props de Card
 interface CardProps {
   id: number;
   name: string;
@@ -22,7 +21,6 @@ function Card({ id, name, description, price, discountPrice, isNew, imageLink }:
     navigate(`/product/${id}`);
   };
 
-  // Calculando a porcentagem de desconto
   const discountPercentage = discountPrice ? Math.round(((price - discountPrice) / price) * 100) : null;
 
   return (

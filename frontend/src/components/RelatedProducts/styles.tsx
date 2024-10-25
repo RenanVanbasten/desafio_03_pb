@@ -35,8 +35,7 @@ export const ProductsContainer = styled.div`
     width: 100%;
     max-width: 1440px;
   }
-
-  button {
+  .show-more {
     margin-top: 30px;
     margin-bottom: 20px;
     width: 245px;
@@ -47,7 +46,7 @@ export const ProductsContainer = styled.div`
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
-    cursor: pointer; /* Adiciona um cursor de ponteiro para o botão */
+    cursor: pointer;
     transition: all 0.3s ease;
 
     &:hover {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const NavigationTrail = styled.div`
   background-color: #F9F1E7; 
   margin-top: 0; 
-  margin: 0 auto 50px; /* Centraliza horizontalmente com margem automática */
+  margin: 0 auto 50px; 
   width: 100%; 
   max-width: 1440px;
   height: 50px; 

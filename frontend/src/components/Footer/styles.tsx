@@ -1,19 +1,18 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
-  padding: 0 120px; /* Espaço de 50px do canto esquerdo e direito */
+  padding: 0 120px;
   display: flex;
-  flex-direction: column; /* Para alinhar os itens verticalmente */
-  align-items: center; /* Centraliza os itens horizontalmente */
-  max-width: 1440px; /* Largura máxima do Footer */
-  margin: 0 auto; /* Centraliza o FooterContainer na tela */
+  flex-direction: column;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
 
   .footer-top {
-    padding: 30px 0; /* Espaço interno superior e inferior */
+    padding: 30px 0;
     display: flex;
     justify-content: space-between;
-    width: 100%; /* Faz com que o footer ocupe toda a largura disponível */
-
+    width: 100%; 
     h4 {
       font-size: 24px;
       font-weight: 700;

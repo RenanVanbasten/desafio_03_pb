@@ -4,29 +4,30 @@ export const ProductsContainer = styled.div`
   .container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center;
     width: 100%;
-    margin: 0 auto; /* Centraliza horizontalmente */
+    margin: 0 auto;
   }
 
   .container-title {
     display: flex;
-    justify-content: center; /* Centraliza o título */
-    margin-bottom: 20px; /* Espaçamento abaixo do título */
+    justify-content: center; 
+    margin-bottom: 20px; 
   }
 
   .container-card {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Organiza em 4 colunas */
-    grid-gap: 20px; /* Espaçamento entre os cards */
-    justify-items: center; /* Centraliza os cards individualmente */
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
     width: 100%;
-    max-width: 1200px; /* Limita a largura máxima */
+    max-width: 1200px; 
     margin-bottom: 20px;
   }
 
-  button {
-    margin-bottom: 20px;
+  .show-more {
+    margin-top: 20px;
+    margin-bottom: 90px;
     width: 245px;
     height: 48px;
     border: 1px solid #b88e2f;
@@ -35,7 +36,7 @@ export const ProductsContainer = styled.div`
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
-    cursor: pointer; /* Adiciona um cursor de ponteiro para o botão */
+    cursor: pointer; 
     transition: all 0.3s ease;
 
     &:hover {

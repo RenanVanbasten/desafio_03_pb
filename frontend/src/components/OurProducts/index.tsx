@@ -57,7 +57,7 @@ function OurProducts() {
             />
           ))}
         </div>
-        <button onClick={handleShowMore}>Show More</button>
+        <button className="show-more" onClick={handleShowMore}>Show More</button>
       </div>
     </ProductsContainer>
   );

@@ -7,26 +7,24 @@ export const Cards = styled.div`
     max-width: 285px;
     max-height: 446px;
     background-color: #f4f5f7;
-    position: relative; /* Necessário para o posicionamento absoluto do overlay e das tags */
+    position: relative;
 
     img {
       height: 301px;
       width: 285px;
     }
 
-    /* Container das tags (New e Desconto) */
     .tag-container {
       position: absolute;
       top: 15px;
       right: 15px;
       display: flex;
-      gap: 8px; /* Adiciona um espaço entre as tags */
+      gap: 8px; 
     }
 
-    /* Estilos das tags de "New" e "Desconto" */
     .new-tag,
     .discount-tag {
-      position: relative; /* Ajustando a posição relativa dentro do container */
+      position: relative;
       width: 48px;
       height: 48px;
       display: flex;
@@ -40,11 +38,11 @@ export const Cards = styled.div`
     }
 
     .new-tag {
-      background-color: #2ec1ac; /* Cor verde para o New */
+      background-color: #2ec1ac;
     }
 
     .discount-tag {
-      background-color: #e97171; /* Cor vermelha para o desconto */
+      background-color: #e97171;
     }
 
     .card-text {
@@ -114,10 +112,28 @@ export const Cards = styled.div`
     }
 
     &:hover {
-      filter: brightness(1.0);
+      filter: brightness(1);
       .overlay {
-        opacity: 1; /* Mostra o overlay no hover */
+        opacity: 1;
       }
+    }
+
+    .see-details {
+      margin-bottom: 20px;
+      width: 245px;
+      height: 48px;
+      background-color: white;
+      color: #b88e2f;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .see-details:hover{
+      background-color: #b88e2f;
+      color: white;
     }
   }
 `;
