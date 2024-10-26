@@ -62,6 +62,8 @@ export const ProductContainer = styled.div`
 
       .rate {
         margin-bottom: 10px;
+        max-width: 400px;
+        text-align: justify;
 
         span {
           display: block;

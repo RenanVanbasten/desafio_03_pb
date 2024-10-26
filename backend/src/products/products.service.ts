@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
@@ -19,10 +20,21 @@ export class ProductsService {
     });
   }
 
-  // Adicionar o método DELETE
   async deleteProduct(id: number) {
     return this.prisma.product.delete({
-      where: { id: id },
+      where: { id },
     });
   }
+
+  // Método de atualização
+  // Método de atualização
+async updateProduct(id: number, data) {
+  return this.prisma.product.update({
+    where: {
+      id: Number(id)  // Converte o id para um número
+    },
+    data,
+  });
+}
+
 }
