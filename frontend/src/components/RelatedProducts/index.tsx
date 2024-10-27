@@ -47,7 +47,6 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
 
   const handleShowMore = () => {
     if (visibleProducts < 8) {
-      // Mostra mais 4 produtos
       setVisibleProducts(8);
     } else {
       navigate("/shop");

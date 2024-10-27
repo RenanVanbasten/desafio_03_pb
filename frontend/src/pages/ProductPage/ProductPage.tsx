@@ -6,7 +6,6 @@ import Product from "../../components/Product";
 import RelatedProducts from "../../components/RelatedProducts";
 import Footer from "../../components/Footer";
 import axios from "axios";
-import Home from "../Home/Home";
 
 interface ProductType {
   id: number;

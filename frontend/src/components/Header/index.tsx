@@ -1,4 +1,4 @@
-import FurnIcon from "../../assets/icons/Meubel House_Logos-05.png";
+import FurnIcon from "../../assets/icons/Meubel_House_Logos-05.png";
 import UserIcon from "../../assets/icons/mdi_account-alert-outline.png";
 import SearchIcon from "../../assets/icons/Vector.png";
 import LikesIcon from "../../assets/icons/akar-icons_heart.png";
