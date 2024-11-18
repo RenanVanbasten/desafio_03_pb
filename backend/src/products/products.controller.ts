@@ -1,11 +1,19 @@
-import { Controller, Get, Post, Body, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, Patch, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { FilterProductsDto } from './dtos/filter-products.dto';
+import { CreateProductDto } from './dtos/create-product.dto';
+import { UpdateProductDto } from './dtos/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
+  async getProducts(@Query() filters: FilterProductsDto) {
+    return this.productsService.getFilteredProducts(filters);
+  }
+
+  @Get('all')
   async getAllProducts() {
     return this.productsService.getProducts();
   }
@@ -16,7 +24,7 @@ export class ProductsController {
   }
 
   @Post()
-  async createProduct(@Body() data) {
+  async createProduct(@Body() data: CreateProductDto) {
     return this.productsService.createProduct(data);
   }
 
@@ -25,9 +33,8 @@ export class ProductsController {
     return this.productsService.deleteProduct(Number(id));
   }
 
-  // Método de atualização (PATCH)
   @Patch(':id')
-  async updateProduct(@Param('id') id: number, @Body() data) {
+  async updateProduct(@Param('id') id: number, @Body() data: UpdateProductDto) {
     return this.productsService.updateProduct(id, data);
   }
 }
