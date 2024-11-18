@@ -1,52 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateCategoryDto } from './dtos/create-category.dto';
+import { UpdateCategoryDto } from './dtos/update-category.dto';
+import { QueryCategoryDto } from './dtos/query-category.dto';
 
 @Injectable()
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
-  // Criar uma nova categoria
-  async createCategory(data: { name: string; image_link: string }) {
-    return await this.prisma.category.create({
-      data: {
-        name: data.name,
-        image_link: data.image_link, // Certifique-se de usar image_link
-      },
-    });
+  async createCategory(data: CreateCategoryDto) {
+    return this.prisma.category.create({ data });
   }
-  
 
-  // Buscar todas as categorias
+  async getCategoriesWithFilters(query: QueryCategoryDto) {
+    const { name, page = 1, limit = 10 } = query;
+
+    const where = name ? { name: { contains: name } } : {};
+    const skip = (page - 1) * limit;
+
+    const categories = await this.prisma.category.findMany({
+      where,
+      skip,
+      take: limit,
+    });
+
+    const total = await this.prisma.category.count({ where });
+
+    return { categories, total, page, totalPages: Math.ceil(total / limit) };
+  }
+
   async getCategories() {
-    return await this.prisma.category.findMany();
+    return this.prisma.category.findMany();
   }
 
-  // Buscar uma categoria por ID
   async getCategoryById(id: number) {
-    return await this.prisma.category.findUnique({
-      where: {
-        id: Number(id),  // Certifica-se de que o id é tratado como número
-      },
-    });
+    return this.prisma.category.findUnique({ where: { id } });
   }
-  
 
-  // Atualizar uma categoria
-  async updateCategory(id: number, data: { name?: string; image_link?: string }) {
-    return await this.prisma.category.update({
+  async updateCategory(id: number, data: UpdateCategoryDto) {
+    return this.prisma.category.update({
       where: { id },
       data,
     });
   }
 
-  // Deletar uma categoria
   async deleteCategory(id: number) {
-    return await this.prisma.category.delete({
-      where: {
-        id: Number(id),  // Certifica-se de que o id é tratado como número
-      },
-    });
+    return this.prisma.category.delete({ where: { id } });
   }
-  
-  
 }
