@@ -22,10 +22,10 @@ function Home() {
             style={{ width: "1440px", height: "500px" }}
           />
         </div>
-        <Categories />  {/* Componente de categorias */}
-        <Products />    {/* Componente de produtos */}
-        <Features />    {/* Seção de features */}
-        <Footer />      {/* Rodapé */}
+        <Categories />
+        <Products /> 
+        <Features />
+        <Footer /> 
       </div>
     );
   }

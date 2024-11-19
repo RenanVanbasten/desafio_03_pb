@@ -10,23 +10,30 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async getFilteredProducts(filters: FilterProductsDto) {
-    const { category_ids, is_new, has_discount, sort_by, page = 1, limit = 10 } = filters;
+    const { category_ids, is_new, has_discount, sort_by, page = 1, limit = 16 } = filters;
   
     let categories: number[] | undefined;
     if (typeof category_ids === 'string') {
-      categories = category_ids.split(',').map((id: string) => parseInt(id, 10));
+      categories = category_ids
+        .split(',')
+        .map((id) => parseInt(id, 10))
+        .filter((id) => !isNaN(id));
     } else if (Array.isArray(category_ids)) {
-      categories = category_ids.map((id: string) => parseInt(id, 10));
+      categories = category_ids
+        .map((id) => parseInt(id.toString(), 10))
+        .filter((id) => !isNaN(id));
     }
   
     const newStatus = is_new ? String(is_new) === 'true' : undefined;
     const discountStatus = has_discount ? String(has_discount) === 'true' : undefined;
-    const itemsPerPage = parseInt(limit.toString(), 10);
+  
+    const maxLimit = 16;
+    const itemsPerPage = Math.min(parseInt(limit.toString(), 10), maxLimit);
     const currentPage = parseInt(page.toString(), 10);
   
     const skip = (currentPage - 1) * itemsPerPage;
   
-    const where: any = {};
+    const where: Prisma.productWhereInput = {};
     if (categories?.length) {
       where.category_id = { in: categories };
     }
@@ -36,6 +43,8 @@ export class ProductsService {
     if (discountStatus) {
       where.discount_price = { not: null };
     }
+  
+    console.log('Where Filter:', JSON.stringify(where, null, 2));
   
     const orderBy: Prisma.productOrderByWithRelationInput | undefined = sort_by
       ? { price: sort_by === 'ascending' ? 'asc' : 'desc' }

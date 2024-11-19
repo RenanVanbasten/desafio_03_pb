@@ -16,15 +16,22 @@ interface Product {
 
 function OurProducts() {
   const [products, setProducts] = useState<Product[]>([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<Product[]>(
-          "http://localhost:3000/products"
+        const response = await axios.get<{ products: Product[] }>(
+          "http://localhost:3000/products",
+          {
+            params: {
+              has_discount: true,
+              is_new: true,
+              limit: 8,
+            },
+          }
         );
-        setProducts(response.data);
+        setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -44,7 +51,7 @@ function OurProducts() {
           <h1>Our Products</h1>
         </div>
         <div className="container-card">
-          {products.slice(0, 8).map((product) => ( 
+          {products.map((product) => (
             <Card
               key={product.id}
               id={product.id}
@@ -57,7 +64,9 @@ function OurProducts() {
             />
           ))}
         </div>
-        <button className="show-more" onClick={handleShowMore}>Show More</button>
+        <button className="show-more" onClick={handleShowMore}>
+          Show More
+        </button>
       </div>
     </ProductsContainer>
   );

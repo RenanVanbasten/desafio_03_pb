@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Icon01 from "../../assets/icons/Vector (1).png";
 import Icon02 from "../../assets/icons/Vector (2).png";
 import Icon03 from "../../assets/icons/Vector (3).png";
 import HeroImage from "../../assets/images/hero-shop.png";
-import axios from "axios";
 import Header from "../../components/Header";
 import ProductsList from "../../components/ProductsList";
 import Features from "../../components/Features";
@@ -21,6 +21,13 @@ interface Product {
   category_id: number;
 }
 
+interface ProductsResponse {
+  products: Product[];
+  totalPages: number;
+  total: number;
+}
+
+
 interface FiltersState {
   category_ids: number[];
   is_new: boolean;
@@ -30,7 +37,9 @@ interface FiltersState {
 
 function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({
     category_ids: [],
@@ -39,107 +48,97 @@ function Shop() {
     sort_by: "default",
   });
   const [productsPerPage, setProductsPerPage] = useState<number>(16);
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get<Product[]>(
-          "http://localhost:3000/products"
-        );
-        setProducts(response.data);
-        setFilteredProducts(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      }
-    };
+    console.log("Filtros Atualizados:", filters);
+  }, [filters]);
 
-    fetchProducts();
-  }, []);
+  const fetchFilteredProducts = async () => {
+    try {
+      const response = await axios.get<ProductsResponse>(
+        "http://localhost:3000/products",
+        {
+          params: {
+            category_ids:
+              filters.category_ids.length > 0
+                ? filters.category_ids.join(",")
+                : undefined,
+            is_new: filters.is_new || undefined,
+            has_discount: filters.has_discount || undefined,
+            sort_by:
+              filters.sort_by !== "default" ? filters.sort_by : undefined,
+            page: currentPage,
+            limit: productsPerPage,
+          },
+        }
+      );
+
+      const { products, total, totalPages } = response.data;
+      setProducts(Array.isArray(products) ? products : []);
+      setTotalProducts(total || 0);
+      setTotalPages(totalPages || 1);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      setProducts([]);
+      setTotalProducts(0);
+      setTotalPages(1);
+    }
+  };
+
+  useEffect(() => {
+    fetchFilteredProducts();
+  }, [filters, currentPage, productsPerPage]);
 
   const toggleFilters = () => {
     setShowFilters((prevState) => !prevState);
   };
 
-  const handleFilterChange = (e: any) => {
-    const { name, value, checked } = e.target;
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
 
-    if (name === "is_new" || name === "has_discount") {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        [name]: checked,
-      }));
-    } else if (name === "category") {
-      const categoryId = parseInt(value, 10);
+    if (e.target instanceof HTMLInputElement) {
+      const { checked } = e.target;
+
+      if (name === "is_new" || name === "has_discount") {
+        setFilters((prevFilters) => {
+          const updatedFilters = { ...prevFilters, [name]: checked };
+          console.log("Filtro Atualizado", updatedFilters);
+          return updatedFilters;
+        });
+      } else if (name === "category") {
+        const categoryId = parseInt(value);
+        setFilters((prevFilters) => {
+          const updatedCategoryIds = prevFilters.category_ids.includes(
+            categoryId
+          )
+            ? prevFilters.category_ids.filter((id) => id !== categoryId)
+            : [...prevFilters.category_ids, categoryId];
+          const updatedFilters = {
+            ...prevFilters,
+            category_ids: updatedCategoryIds,
+          };
+          console.log("Filtro Atualizado", updatedFilters);
+          return updatedFilters;
+        });
+      }
+    } else if (e.target instanceof HTMLSelectElement) {
       setFilters((prevFilters) => {
-        let updatedCategories = [...prevFilters.category_ids];
-        if (checked) {
-          updatedCategories.push(categoryId);
-        } else {
-          updatedCategories = updatedCategories.filter(
-            (id) => id !== categoryId
-          );
-        }
-        return {
-          ...prevFilters,
-          category_ids: updatedCategories,
-        };
+        const updatedFilters = { ...prevFilters, [name]: value };
+        console.log("Filtro Atualizado", updatedFilters);
+        return updatedFilters;
       });
-    } else if (name === "sort_by") {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        sort_by: value,
-      }));
     }
-
-    setCurrentPage(1);
   };
 
-  const handleShowChange = (e: any) => {
+  const handleShowChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1) {
+    if (!isNaN(value)) {
       setProductsPerPage(value);
       setCurrentPage(1);
     }
   };
-
-  useEffect(() => {
-    let filtered = [...products];
-
-    if (filters.category_ids.length > 0) {
-      filtered = filtered.filter((product) =>
-        filters.category_ids.includes(product.category_id)
-      );
-    }
-
-    if (filters.is_new) {
-      filtered = filtered.filter((product) => product.is_new);
-    }
-
-    if (filters.has_discount) {
-      filtered = filtered.filter(
-        (product) =>
-          product.discount_price !== null &&
-          product.discount_price !== undefined
-      );
-    }
-
-    if (filters.sort_by === "ascending") {
-      filtered = filtered.sort((a, b) => a.price - b.price);
-    } else if (filters.sort_by === "descending") {
-      filtered = filtered.sort((a, b) => b.price - a.price);
-    }
-
-    setFilteredProducts(filtered);
-  }, [filters, products]);
-
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
 
   return (
     <div>
@@ -165,21 +164,30 @@ function Shop() {
             <img src={Icon02} alt="" />
             <img src={Icon03} alt="" />
             <div className="vertical-line"></div>
-            <span>
-              Showing {currentProducts.length} of {products.length} results
-            </span>
+            <p>
+              Showing {products.length} of {totalProducts} results
+            </p>
           </div>
           <div>
             <label htmlFor="show">Show</label>
-            <input
-              type="number"
+            <select
               name="show"
               value={productsPerPage}
               onChange={handleShowChange}
-              min="1"
-              max={filteredProducts.length}
-              placeholder="16"
-            />
+              style={{
+                width: "150px",
+                height: "55px",
+                border: "none",
+                textAlign: "center",
+                lineHeight: "55px",
+              }}
+            >
+              <option value={4}>4 products</option>
+              <option value={8}>8 products</option>
+              <option value={12}>12 products</option>
+              <option value={16}>16 products</option>
+            </select>
+
             <label htmlFor="sort_by">Sort by</label>
             <select
               name="sort_by"
@@ -201,64 +209,73 @@ function Shop() {
           </div>
         </div>
       </FilterContainer>
-
-      {showFilters && (
-        <FiltersSection>
-          <h3>Filter Products By:</h3>
-          <div className="filter-group">
-            <label>
-              <input
-                type="checkbox"
-                name="category"
-                value="7"
-                onChange={handleFilterChange}
-              />
-              Dining
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="category"
-                value="8"
-                onChange={handleFilterChange}
-              />
-              Living
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="category"
-                value="9"
-                onChange={handleFilterChange}
-              />
-              Bedroom
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="is_new"
-                onChange={handleFilterChange}
-              />
-              New Products
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="has_discount"
-                onChange={handleFilterChange}
-              />
-              Products with Discount
-            </label>
-          </div>
-        </FiltersSection>
-      )}
+      <div>
+        {showFilters && (
+          <FiltersSection>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  name="is_new"
+                  checked={filters.is_new}
+                  onChange={handleFilterChange}
+                />
+                New Products
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="has_discount"
+                  checked={filters.has_discount}
+                  onChange={handleFilterChange}
+                />
+                Has discount
+              </label>
+              <div>
+                <label>
+                  Categories:
+                  <input
+                    type="checkbox"
+                    name="category"
+                    value="1"
+                    checked={filters.category_ids.includes(1)}
+                    onChange={handleFilterChange}
+                  />
+                  Dining
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="category"
+                    value="2"
+                    checked={filters.category_ids.includes(2)}
+                    onChange={handleFilterChange}
+                  />
+                  Living
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="category"
+                    value="3"
+                    checked={filters.category_ids.includes(3)}
+                    onChange={handleFilterChange}
+                  />
+                  Bedroom
+                </label>
+              </div>
+            </div>
+          </FiltersSection>
+        )}
+      </div>
 
       <ProductsList
-        products={currentProducts}
+        products={products}
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={(page: number) => setCurrentPage(page)}
       />
+
       <Features />
       <Footer />
     </div>

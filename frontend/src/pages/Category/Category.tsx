@@ -17,41 +17,52 @@ interface Product {
   category_id: number;
 }
 
+interface ProductsResponse {
+  products: Product[];
+  totalPages: number;
+}
+
 function Category() {
   const { categoryName } = useParams<{ categoryName: string }>();
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const productsPerPage = 16;
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get<Product[]>("http://localhost:3000/products");
-        const categoryMap: { [key: string]: number } = {
-          Dining: 7,
-          Living: 8,
-          Bedroom: 9,
-        };
+  const categoryMap: Record<string, number> = {
+    Dining: 1,
+    Living: 2,
+    Bedroom: 3,
+  };
 
-        if (categoryName && categoryName in categoryMap) {
-          const categoryId = categoryMap[categoryName as keyof typeof categoryMap];
-          const filtered = response.data.filter(product => product.category_id === categoryId);
-          setFilteredProducts(filtered);
-        } else {
-          setFilteredProducts([]);
-        }
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      const categoryId = categoryMap[categoryName || ""];
+      if (!categoryId) {
+        console.error("Categoria inválida:", categoryName);
+        setProducts([]);
+        return;
+      }
+
+      try {
+        const response = await axios.get<ProductsResponse>("http://localhost:3000/products", {
+          params: {
+            category_ids: categoryId,
+            page: currentPage,
+            limit: productsPerPage,
+          },
+        });
+
+        setProducts(response.data.products || []);
+        setTotalPages(response.data.totalPages || 1);
       } catch (error) {
-        console.error("Erro ao buscar os produtos da categoria:", error);
+        console.error("Erro ao buscar produtos da categoria:", error);
+        setProducts([]);
       }
     };
 
-    fetchProducts();
-  }, [categoryName]);
-
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    fetchProductsByCategory();
+  }, [categoryName, currentPage]);
 
   return (
     <div>
@@ -69,7 +80,7 @@ function Category() {
       </div>
 
       <ProductsList
-        products={currentProducts}
+        products={products}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
