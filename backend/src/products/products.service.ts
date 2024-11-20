@@ -43,9 +43,7 @@ export class ProductsService {
     if (discountStatus) {
       where.discount_price = { not: null };
     }
-  
-    console.log('Where Filter:', JSON.stringify(where, null, 2));
-  
+    
     const orderBy: Prisma.productOrderByWithRelationInput | undefined = sort_by
       ? { price: sort_by === 'ascending' ? 'asc' : 'desc' }
       : undefined;

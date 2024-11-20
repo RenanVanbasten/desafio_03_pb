@@ -4,10 +4,7 @@ import Icon01 from "../../assets/icons/Vector (1).png";
 import Icon02 from "../../assets/icons/Vector (2).png";
 import Icon03 from "../../assets/icons/Vector (3).png";
 import HeroImage from "../../assets/images/hero-shop.png";
-import Header from "../../components/Header";
 import ProductsList from "../../components/ProductsList";
-import Features from "../../components/Features";
-import Footer from "../../components/Footer";
 import { FilterContainer, FiltersSection } from "./styles";
 
 interface Product {
@@ -26,7 +23,6 @@ interface ProductsResponse {
   totalPages: number;
   total: number;
 }
-
 
 interface FiltersState {
   category_ids: number[];
@@ -49,9 +45,7 @@ function Shop() {
   });
   const [productsPerPage, setProductsPerPage] = useState<number>(16);
 
-  useEffect(() => {
-    console.log("Filtros Atualizados:", filters);
-  }, [filters]);
+  useEffect(() => {}, [filters]);
 
   const fetchFilteredProducts = async () => {
     try {
@@ -104,7 +98,6 @@ function Shop() {
       if (name === "is_new" || name === "has_discount") {
         setFilters((prevFilters) => {
           const updatedFilters = { ...prevFilters, [name]: checked };
-          console.log("Filtro Atualizado", updatedFilters);
           return updatedFilters;
         });
       } else if (name === "category") {
@@ -119,14 +112,12 @@ function Shop() {
             ...prevFilters,
             category_ids: updatedCategoryIds,
           };
-          console.log("Filtro Atualizado", updatedFilters);
           return updatedFilters;
         });
       }
     } else if (e.target instanceof HTMLSelectElement) {
       setFilters((prevFilters) => {
         const updatedFilters = { ...prevFilters, [name]: value };
-        console.log("Filtro Atualizado", updatedFilters);
         return updatedFilters;
       });
     }
@@ -142,143 +133,138 @@ function Shop() {
 
   return (
     <div>
-      <Header />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          margin: 0,
-        }}
-      >
-        <img
-          src={HeroImage}
-          alt="Hero"
-          style={{ width: "1440px", height: "500px" }}
-        />
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      margin: 0,
+    }}
+  >
+    <img
+      src={HeroImage}
+      alt="Hero"
+      style={{ width: "1440px", height: "500px" }}
+    />
+  </div>
+  <FilterContainer>
+    <div className="filter-container">
+      <div className="filter-icons">
+        <img src={Icon01} alt="Filter" onClick={toggleFilters} />
+        <span>Filter</span>
+        <img src={Icon02} alt="" />
+        <img src={Icon03} alt="" />
+        <div className="vertical-line"></div>
+        <p>
+          Showing {products.length} of {totalProducts} results
+        </p>
       </div>
-      <FilterContainer>
-        <div className="filter-container">
-          <div className="filter-icons">
-            <img src={Icon01} alt="Filter" onClick={toggleFilters} />
-            <span>Filter</span>
-            <img src={Icon02} alt="" />
-            <img src={Icon03} alt="" />
-            <div className="vertical-line"></div>
-            <p>
-              Showing {products.length} of {totalProducts} results
-            </p>
-          </div>
-          <div>
-            <label htmlFor="show">Show</label>
-            <select
-              name="show"
-              value={productsPerPage}
-              onChange={handleShowChange}
-              style={{
-                width: "150px",
-                height: "55px",
-                border: "none",
-                textAlign: "center",
-                lineHeight: "55px",
-              }}
-            >
-              <option value={4}>4 products</option>
-              <option value={8}>8 products</option>
-              <option value={12}>12 products</option>
-              <option value={16}>16 products</option>
-            </select>
-
-            <label htmlFor="sort_by">Sort by</label>
-            <select
-              name="sort_by"
-              id="sort_by"
-              onChange={handleFilterChange}
-              value={filters.sort_by}
-              style={{
-                width: "288px",
-                height: "55px",
-                border: "none",
-                textAlign: "center",
-                lineHeight: "55px",
-              }}
-            >
-              <option value="default">Default</option>
-              <option value="ascending">Price: Low to High</option>
-              <option value="descending">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
-      </FilterContainer>
       <div>
-        {showFilters && (
-          <FiltersSection>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  name="is_new"
-                  checked={filters.is_new}
-                  onChange={handleFilterChange}
-                />
-                New Products
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="has_discount"
-                  checked={filters.has_discount}
-                  onChange={handleFilterChange}
-                />
-                Has discount
-              </label>
-              <div>
-                <label>
-                  Categories:
-                  <input
-                    type="checkbox"
-                    name="category"
-                    value="1"
-                    checked={filters.category_ids.includes(1)}
-                    onChange={handleFilterChange}
-                  />
-                  Dining
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="category"
-                    value="2"
-                    checked={filters.category_ids.includes(2)}
-                    onChange={handleFilterChange}
-                  />
-                  Living
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="category"
-                    value="3"
-                    checked={filters.category_ids.includes(3)}
-                    onChange={handleFilterChange}
-                  />
-                  Bedroom
-                </label>
-              </div>
-            </div>
-          </FiltersSection>
-        )}
+        <label htmlFor="show">Show</label>
+        <select
+          name="show"
+          value={productsPerPage}
+          onChange={handleShowChange}
+          style={{
+            width: "150px",
+            height: "55px",
+            border: "none",
+            textAlign: "center",
+            lineHeight: "55px",
+          }}
+        >
+          <option value={4}>4 products</option>
+          <option value={8}>8 products</option>
+          <option value={12}>12 products</option>
+          <option value={16}>16 products</option>
+        </select>
+
+        <label htmlFor="sort_by">Sort by</label>
+        <select
+          name="sort_by"
+          id="sort_by"
+          onChange={handleFilterChange}
+          value={filters.sort_by}
+          style={{
+            width: "288px",
+            height: "55px",
+            border: "none",
+            textAlign: "center",
+            lineHeight: "55px",
+          }}
+        >
+          <option value="default">Default</option>
+          <option value="ascending">Price: Low to High</option>
+          <option value="descending">Price: High to Low</option>
+        </select>
       </div>
-
-      <ProductsList
-        products={products}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page: number) => setCurrentPage(page)}
-      />
-
-      <Features />
-      <Footer />
     </div>
+  </FilterContainer>
+
+  <div style={{ display: "flex", gap: "20px" }}>
+    {showFilters && (
+      <FiltersSection>
+        <div className="filterSectionContainer">
+          <label>
+            <input
+              type="checkbox"
+              name="is_new"
+              checked={filters.is_new}
+              onChange={handleFilterChange}
+            />
+            New Products
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="has_discount"
+              checked={filters.has_discount}
+              onChange={handleFilterChange}
+            />
+            Has discount
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="1"
+              checked={filters.category_ids.includes(1)}
+              onChange={handleFilterChange}
+            />
+            Dining
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="2"
+              checked={filters.category_ids.includes(2)}
+              onChange={handleFilterChange}
+            />
+            Living
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="3"
+              checked={filters.category_ids.includes(3)}
+              onChange={handleFilterChange}
+            />
+            Bedroom
+          </label>
+        </div>
+      </FiltersSection>
+    )}
+
+    <ProductsList
+      products={products}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page: number) => setCurrentPage(page)}
+    />
+  </div>
+</div>
+
   );
 }
 

@@ -14,7 +14,14 @@ interface ProductType {
   image_link: string;
 }
 
-function RelatedProducts({ categoryId }: { categoryId: number }) {
+interface RelatedProductsResponse {
+  products: ProductType[];
+  page: number;
+  total: number;
+  totalPages: number;
+}
+
+function RelatedProducts({ categoryId, currentProductId }: { categoryId: number; currentProductId: number }) {
   const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
   const [visibleProducts, setVisibleProducts] = useState(4);
@@ -23,33 +30,43 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
   useEffect(() => {
     const fetchRelatedProducts = async () => {
       try {
-        const response = await axios.get<ProductType[]>(
+        const response = await axios.get<RelatedProductsResponse>(
           `http://localhost:3000/products?category_id=${categoryId}`
         );
-        setRelatedProducts(response.data);
-        setLoading(false);
+
+        if (response.data && Array.isArray(response.data.products)) {
+          const filteredProducts = response.data.products.filter(
+            (product) => product.id !== currentProductId
+          );
+          setRelatedProducts(filteredProducts);
+        } else {
+          console.error("A API não retornou um array válido na chave 'products'.");
+          setRelatedProducts([]);
+        }
       } catch (error) {
-        console.error("Error fetching related products:", error);
+        console.error("Erro ao buscar produtos relacionados:", error);
+        setRelatedProducts([]);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchRelatedProducts();
-  }, [categoryId]);
+  }, [categoryId, currentProductId]);
 
   if (loading) {
-    return <div>Loading related products...</div>;
+    return <div>Carregando produtos relacionados...</div>;
   }
 
   if (relatedProducts.length === 0) {
-    return <div>No related products found.</div>;
+    return <div>Não foram encontrados produtos relacionados.</div>;
   }
 
   const handleShowMore = () => {
     if (visibleProducts < 8) {
-      setVisibleProducts(8);
+      setVisibleProducts(8); 
     } else {
-      navigate("/shop");
+      navigate("/shop"); 
     }
   };
 
@@ -75,7 +92,7 @@ function RelatedProducts({ categoryId }: { categoryId: number }) {
             ))}
           </div>
           <button className="show-more" onClick={handleShowMore}>
-            Show More
+            {visibleProducts < 8 ? "Show More" : "Go to Shop"}
           </button>
           <hr />
         </div>

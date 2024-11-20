@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Header from "../../components/Header";
 import { NavigationTrail } from "./styles";
 import Product from "../../components/Product";
 import RelatedProducts from "../../components/RelatedProducts";
-import Footer from "../../components/Footer";
 import axios from "axios";
 
 interface ProductType {
@@ -34,12 +32,15 @@ function ProductPage() {
           return;
         }
 
-        console.log(`Fetching product with ID: ${id}`);
-
         const response = await axios.get<ProductType>(
           `http://localhost:3000/products/${id}`
         );
-        setProduct(response.data);
+
+        if (response.data) {
+          setProduct(response.data);
+        } else {
+          console.error("Produto não encontrado.");
+        }
         setLoading(false);
       } catch (error) {
         console.error("Erro ao buscar o produto:", error);
@@ -60,7 +61,6 @@ function ProductPage() {
 
   return (
     <div>
-      <Header />
       <NavigationTrail>
         <div className="navigationTrail-container">
           <Link to="/" style={{ textDecoration: "none", color: "#9f9f9f"}}>
@@ -76,10 +76,10 @@ function ProductPage() {
         </div>
       </NavigationTrail>
       <Product product={product} />
-      <RelatedProducts categoryId={product.category_id} />
-      <Footer />
+      <RelatedProducts categoryId={product.category_id} currentProductId={product.id} />
     </div>
   );
 }
+
 
 export default ProductPage;

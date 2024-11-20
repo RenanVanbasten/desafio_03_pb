@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../../components/Header";
 import ProductsList from "../../components/ProductsList";
-import Features from "../../components/Features";
-import Footer from "../../components/Footer";
 import axios from "axios";
 
 interface Product {
@@ -66,7 +63,6 @@ function Category() {
 
   return (
     <div>
-      <Header />
       <div
         style={{
           display: "flex",
@@ -85,8 +81,6 @@ function Category() {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
-      <Features />
-      <Footer />
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled,  { keyframes } from "styled-components";
 
 export const FilterContainer = styled.div`
   margin-top: 0;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-around;
   gap: 20px;
@@ -14,6 +14,7 @@ export const FilterContainer = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-bottom: 0;
   }
 
   div {
@@ -50,34 +51,39 @@ export const FilterContainer = styled.div`
   }
 `;
 
-export const FiltersSection = styled.div`
-  width: 1440px;
-  margin: 20px auto;
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 8px;
 
-  h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
+const slideDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
-  .filter-group {
+export const FiltersSection = styled.div`
+  width: 170px; 
+  background-color: #f9f1e7;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 9pt;
+  height: 170px;
+  animation: ${slideDown} 0.5s ease-in-out;
+
+  .filterSectionContainer {
     display: flex;
     flex-direction: column;
+    gap: 5px; 
+    margin-top: 10%;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
     gap: 10px;
-
-    label {
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-    }
+    justify-content: flex-start;
+    margin-left: 20%;
   }
 `;
